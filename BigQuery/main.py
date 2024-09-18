@@ -1,43 +1,48 @@
 import requests
+import psycopg2
 
+# Fetching Pokemon data
 r = requests.get('https://pokeapi.co/api/v2/pokemon')
-
-# r.status_code
-
-# r.headers['content-type']
-
-# r.encoding
-
-# print(type(r.text))
-
-pokelist = []
-pokedict = {}
-
-
-# result["name"] = "bulba"
-# result["type"] = "grass"
-
-
 r_js = r.json()
 
-def add_to_dict(dict_name, key, value):
-	dict_name[key] = value
-
 i = 0
+pokelist = []
 for var in r_js.get("results"):
+    pokedict = {}
+    pokedict["name"] = var["name"]
+    info_request = requests.get(var.get("url"))
+    pokedict["type"] = info_request.json().get("types")[0].get("type").get("name")
+    pokelist.append(pokedict)
+    i += 1
+    if (i == 3):
+        break
 
-	# key = next(iter(var))
-	# value = 
+# Connect to PostgreSQL
+conn = psycopg2.connect(
+    dbname="postgres",
+    user="postgres",
+    password="123",
+    host="172.21.0.3",
+    port="5432"
+)
+cursor = conn.cursor()
 
-	pokedict["name"] = var["name"]
-	print(pokedict)
-	pokelist.append(pokedict)
+# Create table if it doesn't exist
+cursor.execute("""
+    CREATE TABLE IF NOT EXISTS pokemon (
+        name VARCHAR(50),
+        type VARCHAR(50)
+    );
+""")
 
-	url = var.get("url")
-	r = requests.get(url)
-	# print ( r.json().get("types")[0].get("type").get("name") )
+# Insert data into PostgreSQL
+for poke in pokelist:
+    cursor.execute(
+        "INSERT INTO pokemon (name, type) VALUES (%s, %s)",
+        (poke['name'], poke['type'])
+    )
 
-	i += 1
-	if (i == 3):
-		break	
-
+# Commit changes and close connection
+conn.commit()
+cursor.close()
+conn.close()

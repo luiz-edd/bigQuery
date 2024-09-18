@@ -1,0 +1,67 @@
+# setar um username para cada 
+# Use postgres/123 user/password credentials
+version: '3.9'
+
+services:
+
+  db:
+    image: postgres
+    container_name: postgrespoke
+    restart: always
+    # set shared memory limit when using docker-compose
+    shm_size: 256mb
+    # or set shared memory limit when deploy via swarm stack
+    volumes:
+     - type: tmpfs
+       target: /dev/shm
+      #  tmpfs:
+      #    size: 134217728 # 128*2^20 bytes = 128Mb
+    environment:
+      POSTGRES_PASSWORD: 123
+
+  # adminer:
+  #   image: adminer
+  #   container_name: adminerpoke
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
+
+  cloudbeaver:
+      image: dbeaver/cloudbeaver
+      container_name: dbeaverpoke
+      restart: always
+      ports:
+       - '8978:8978'  
+  
+  # username para conectar no dbase default e database dafult 
+  #
+  clickhouse:
+    image: clickhouse/clickhouse-server
+    user: "101:101"
+    container_name: clickhouse
+    hostname: clickhouse
+    # volumes:
+    #   - ${PWD}/fs/volumes/clickhouse/etc/clickhouse-server/config.d/config.xml:/etc/clickhouse-server/config.d/config.xml
+    #   - ${PWD}/fs/volumes/clickhouse/etc/clickhouse-server/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml
+    #   - ${PWD}/fs/volumes/clickhouse/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    depends_on:
+      - db
+    
+  metabase:
+    image: metabase/metabase:latest
+    container_name: metabase
+    hostname: metabase
+    # volumes:
+    #   - /dev/urandom:/dev/random:ro
+    ports:
+      - 3000:3000
+    healthcheck:
+      test: curl --fail -I http://localhost:3000/api/health || exit 1
+      interval: 15s
+      timeout: 5s
+      retries: 5
+  
+  
