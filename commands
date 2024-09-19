@@ -8,6 +8,7 @@ docker-compose up -d
 docker ps -a
 docker remove ID
 docker stop ID
+docker restart metabase
 
 # start Airbyte
 ./run-ab-platform.sh
@@ -20,6 +21,9 @@ sudo docker logs -f metabase
 sudo docker-compose down --remove-orphans
 
 docker stop $(docker ps -q)
+
+docker exec -it metabase /bin/bash
+
 # stop all dockers
 
 # airbyte

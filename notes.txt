@@ -1,15 +1,13 @@
 o que e um container? 
-e um processo que tem menos permissoes que um processo normal.
 Diferente de uma vm, o container compartilha a kernel e a mesma arquitetura do SO.
 esse processo permite rodar imagens(softwares) de uma forma isoalda do restante do PC.
 
 O que sao imagens no container?
 Um conjunto de softwares necessarios para realizar determinada operacao.
 O container e o ambiente em que a imagem esta rodando.
-A imagem contem a "receita" do software, ao seguir essa receita, se cria uma copia do 
-softwareque rodara no seu container.
+A imagem é o produto final da receita(docker file)
 
-O que e um docker?
+O que e um docker? (PaaS?)
 E um servico que fornece diversas funcionalidades para o container. 
 Equivalente ao git(aplicacao) > git hub(servico da aplicacao), exite o 
 container(aplicacao) > docker hub(servico da apliacao). Fornece tambem maneiras de 
