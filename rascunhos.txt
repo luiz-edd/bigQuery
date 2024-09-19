@@ -2,3 +2,9 @@ docker network inspect bigquery_default
 Esse comando cria uma docker network dentro o nome e dado a partir 
 da pasta onde contem o docker-compose.yml no caso bigquery.
 Ele cria uma subnet privada que 
+
+- criar senha bem definida para todos os servicos
+- entender os volumes
+- colocar o .env no .gitignore
+- .envsample
+- configuracao dos servicos com o .env
