@@ -14,28 +14,24 @@ docker restart metabase
 ./run-ab-platform.sh
 #VER LINHA 393
 
-sudo docker network inspect bigquery_default
+docker network inspect bigquery_default
 
-sudo docker logs -f metabase
+docker logs -f metabase
 
-sudo docker-compose down --remove-orphans
+docker-compose down --remove-orphans
 
 docker stop $(docker ps -q)
 
 docker exec -it metabase /bin/bash
 
-# stop all dockers
+docker volume ls
+# delete all docker volumes
+docker volume rm $(docker volume ls -q)
+docker-compose down --volumes
 
-# airbyte
-# In your browser, visit http://localhost:8000
-# username airbyte and password password
+docker images
 
-# cloudBeaver 
-# cbadmin 12345678aA
-
-# postgres
-# postgres 123
-
-# ClickHouse
-# default default
-# as vezes nao tem senha
+# clickhouse driver sh
+# antes de rodar o docker-compose up -d tem que entrar na masta metavase-clickhouse-driver e rodar o comando de baixo
+# para que ele crie a imagem do metabase com os plugins necessarios
+./build_docker_image.sh v0.50.26 1.50.2 my-metabase-with-clickhouse:v0.0.1

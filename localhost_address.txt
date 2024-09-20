@@ -1,0 +1,23 @@
+metabase
+http://localhost:3000
+username metabase
+password 12345678aA
+
+Airbyte
+http://local12345678aAhost:8000
+username airbyte
+password password
+
+PostgreeDB
+username postgres
+password 123
+
+cloudbeaver
+http://localhost:8978
+username cbadmin
+password 12345678aA
+
+clickhouse
+http://localhost:8123
+username default
+password default
