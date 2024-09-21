@@ -1,6 +1,6 @@
 metabase
 http://localhost:3000
-username metabase
+username walker.rabbit.holer@proton.me
 password 12345678aA
 
 Airbyte
@@ -18,6 +18,6 @@ username cbadmin
 password 12345678aA
 
 clickhouse
-http://localhost:8123
+http://localhost:8123/play
 username default
 password default

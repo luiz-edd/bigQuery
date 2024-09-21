@@ -1,5 +1,3 @@
-# setar um username para cada 
-# Use postgres/123 user/password credentials
 version: '3.9'
 
 services:
@@ -9,23 +7,11 @@ services:
     container_name: postgrespoke
     restart: always
     hostname: postgres
-    # # set shared memory limit when using docker-compose
-    # shm_size: 256mb
-    # # or set shared memory limit when deploy via swarm stack
     volumes:
-     - type: tmpfs
-       target: /dev/shm
-      #  tmpfs:
-      #    size: 134217728 # 128*2^20 bytes = 128Mb
+      - ./docker_volumes/postgres:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-
-  # adminer:
-  #   image: adminer
-  #   container_name: adminerpoke
-  #   restart: always
-  #   ports:
-  #     - 8080:8080
+      - PGDATA=/var/lib/postgresql/data/pgdata
 
   cloudbeaver:
       image: dbeaver/cloudbeaver
@@ -34,23 +20,20 @@ services:
       ports:
        - '8978:8978'  
       volumes:
-       - ./docker_volumes/cloudbeaver:/dev/random:ro
-      # Set your admin username and password through environment variables
+       - ./docker_volumes/cloudbeaver:/opt/cloudbeaver/workspace
       environment:
        - CB_ADMIN_NAME=${CB_ADMIN_NAME}
        - CB_ADMIN_PASSWORD=${CB_ADMIN_PASSWORD}
   
-  # username para conectar no dbase default e database dafult 
-  #
   clickhouse:
     image: clickhouse/clickhouse-server
     user: "101:101"
     container_name: clickhouse
     hostname: clickhouse
-    # volumes:
-    #   - ./docker_volumes/clickhouse-server/config.d/config.xml:/etc/clickhouse-server/config.d/config.xml
-    #   - ${PWD}/fs/volumes/clickhouse/etc/clickhouse-server/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml
-    #   - ${PWD}/fs/volumes/clickhouse/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    volumes:
+      - ./docker_volumes/clickhouse/clickhouse-server/config.d/config.xml:/etc/clickhouse-server/config.d/config.xml
+      - ./docker_volumes/clickhouse/fs/volumes/clickhouse/etc/clickhouse-server/users.d/users.xml:/etc/clickhouse-server/users.d/users.xml
+      - ./docker_volumes/clickhouse/fs/volumes/clickhouse/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
     ports:
       - "8123:8123"
       - "9000:9000"
@@ -62,7 +45,9 @@ services:
     container_name: metabase
     hostname: metabase
     volumes:
-      - ./docker_volumes/metabase:/dev/random:ro
+      - ./docker_volumes/metabase:/metabase-data
+    environment:
+      - MB_DB_FILE=/metabase-data/metabase.db
     ports:
       - 3000:3000
     healthcheck:
@@ -70,7 +55,7 @@ services:
       interval: 15s
       timeout: 5s
       retries: 5
-      
+
 # setar para rodar o python
   
   

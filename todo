@@ -5,3 +5,5 @@
 - .envsample
 - configuracao dos servicos com o .env
 - atribuir um ip fixo para cada container na sua criacao
+
+-

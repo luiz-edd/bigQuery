@@ -14,7 +14,7 @@ for var in r_js.get("results"):
     pokedict["type"] = info_request.json().get("types")[0].get("type").get("name")
     pokelist.append(pokedict)
     i += 1
-    if (i == 50):
+    if (i == 100):
         break
 
 # Connect to PostgreSQL
@@ -22,7 +22,7 @@ conn = psycopg2.connect(
     dbname="postgres",
     user="postgres",
     password="123",
-    host="172.25.0.3",
+    host="172.25.0.4",
     port="5432"
 )
 cursor = conn.cursor()

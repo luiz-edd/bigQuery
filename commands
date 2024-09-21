@@ -35,3 +35,8 @@ docker images
 # antes de rodar o docker-compose up -d tem que entrar na masta metavase-clickhouse-driver e rodar o comando de baixo
 # para que ele crie a imagem do metabase com os plugins necessarios
 ./build_docker_image.sh v0.50.26 1.50.2 my-metabase-with-clickhouse:v0.0.1
+
+
+luizeduardo@pop-os:~/repos/bigQuery$ sudo chown -R luizeduardo:luizeduardo docker_volumes
+
+create view fire as select * from default.pokemon where "type"='fire'
