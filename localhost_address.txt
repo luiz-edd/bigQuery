@@ -4,7 +4,7 @@ username walker.rabbit.holer@proton.me
 password 12345678aA
 
 Airbyte
-http://local12345678aAhost:8000
+http://localhost:8000
 username airbyte
 password password
 

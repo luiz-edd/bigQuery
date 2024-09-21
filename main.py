@@ -22,7 +22,7 @@ conn = psycopg2.connect(
     dbname="postgres",
     user="postgres",
     password="123",
-    host="172.25.0.4",
+    host="172.25.0.2",
     port="5432"
 )
 cursor = conn.cursor()
@@ -31,16 +31,17 @@ cursor = conn.cursor()
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS pokemon (
         name VARCHAR(50),
-        type VARCHAR(50)
+        type VARCHAR(50),
+        UNIQUE (name, type)
     );
 """)
 
 # Insert data into PostgreSQL
 for poke in pokelist:
     cursor.execute(
-        "INSERT INTO pokemon (name, type) VALUES (%s, %s)",
-        (poke['name'], poke['type'])
-    )
+    "INSERT INTO pokemon (name, type) VALUES (%s, %s) ON CONFLICT (name, type) DO NOTHING",
+    (poke['name'], poke['type']))
+
 
 # Commit changes and close connection
 conn.commit()

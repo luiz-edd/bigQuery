@@ -22,8 +22,8 @@ services:
       volumes:
        - ./docker_volumes/cloudbeaver:/opt/cloudbeaver/workspace
       environment:
-       - CB_ADMIN_NAME=${CB_ADMIN_NAME}
-       - CB_ADMIN_PASSWORD=${CB_ADMIN_PASSWORD}
+       - CBEAVER_ADMIN_NAME=${CB_ADMIN_NAME}
+       - CBEAVER_ADMIN_PASSWORD=${CB_ADMIN_PASSWORD}
   
   clickhouse:
     image: clickhouse/clickhouse-server
