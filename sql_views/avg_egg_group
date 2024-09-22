@@ -1,0 +1,44 @@
+CREATE VIEW egg_group_metrics AS
+WITH type_counts AS (
+    SELECT
+        egg_group_01 AS egg_group,
+        type AS pokemon_type,
+        COUNT(*) AS type_count
+    FROM
+        pokemon
+    WHERE
+        egg_group_01 IS NOT NULL AND type IS NOT NULL
+    GROUP BY
+        egg_group_01, type
+),
+most_common_type AS (
+    SELECT
+        egg_group,
+        pokemon_type AS most_common_type
+    FROM (
+        SELECT
+            egg_group,
+            pokemon_type,
+            ROW_NUMBER() OVER (PARTITION BY egg_group ORDER BY type_count DESC) AS rn
+        FROM
+            type_counts
+    )
+    WHERE
+        rn = 1
+)
+SELECT
+    egg_group_01 AS egg_group,
+    COUNT(*) AS pokemon_count,
+    AVG(base_happiness) AS avg_base_happiness,
+    AVG(height) AS avg_height,
+    AVG(weight) AS avg_weight,
+    AVG(capture_rate) AS avg_capture_rate,
+    AVG(base_experience) AS avg_base_experience,
+    mct.most_common_type
+FROM
+    pokemon p
+    LEFT JOIN most_common_type mct ON p.egg_group_01 = mct.egg_group
+WHERE
+    egg_group_01 IS NOT NULL
+GROUP BY
+    egg_group_01, mct.most_common_type;

@@ -1,0 +1,12 @@
+CREATE VIEW avg_size_height_experience_by_type AS
+SELECT 
+    type,
+    AVG(height) AS avg_height,
+    AVG(weight) AS avg_weight,  -- Assuming "size" refers to weight in this context
+    AVG(base_experience) AS avg_base_experience,
+    AVG(base_happiness) AS avg_base_happiness,
+    AVG(capture_rate) AS avg_capture_rate
+FROM 
+    pokemon
+GROUP BY 
+    type;

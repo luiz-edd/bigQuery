@@ -1,1 +1,3 @@
-# .env
+docker/.env
+venv/
+docker/docker_volumes/postgres/pgdata

@@ -1,0 +1,63 @@
+CREATE VIEW move_usage_percentage_by_type_pivot AS
+WITH move_counts AS (
+    SELECT
+        type,
+        move_01 AS move_name
+    FROM pokemon
+    UNION ALL
+    SELECT
+        type,
+        move_02 AS move_name
+    FROM pokemon
+    UNION ALL
+    SELECT
+        type,
+        move_03 AS move_name
+    FROM pokemon
+),
+move_usage AS (
+    SELECT
+        type,
+        move_name,
+        COUNT(*) AS move_count
+    FROM move_counts
+    WHERE move_name IS NOT NULL
+    GROUP BY type, move_name
+),
+type_counts AS (
+    SELECT
+        type,
+        COUNT(*) AS type_count
+    FROM pokemon
+    GROUP BY type
+),
+move_usage_percentage AS (
+    SELECT
+        mu.type,
+        mu.move_name,
+        (mu.move_count * 100.0 / tc.type_count) AS move_percentage
+    FROM move_usage mu
+    JOIN type_counts tc ON mu.type = tc.type
+)
+SELECT
+    move_name,
+    MAX(CASE WHEN type = 'normal' THEN move_percentage ELSE 0 END) AS normal_percentage,
+    MAX(CASE WHEN type = 'rock' THEN move_percentage ELSE 0 END) AS rock_percentage,
+    MAX(CASE WHEN type = 'bug' THEN move_percentage ELSE 0 END) AS bug_percentage,
+    MAX(CASE WHEN type = 'steel' THEN move_percentage ELSE 0 END) AS steel_percentage,
+    MAX(CASE WHEN type = 'psychic' THEN move_percentage ELSE 0 END) AS psychic_percentage,
+    MAX(CASE WHEN type = 'electric' THEN move_percentage ELSE 0 END) AS electric_percentage,
+    MAX(CASE WHEN type = 'water' THEN move_percentage ELSE 0 END) AS water_percentage,
+    MAX(CASE WHEN type = 'poison' THEN move_percentage ELSE 0 END) AS poison_percentage,
+    MAX(CASE WHEN type = 'ice' THEN move_percentage ELSE 0 END) AS ice_percentage,
+    MAX(CASE WHEN type = 'dark' THEN move_percentage ELSE 0 END) AS dark_percentage,
+    MAX(CASE WHEN type = 'fighting' THEN move_percentage ELSE 0 END) AS fighting_percentage,
+    MAX(CASE WHEN type = 'fire' THEN move_percentage ELSE 0 END) AS fire_percentage,
+    MAX(CASE WHEN type = 'dragon' THEN move_percentage ELSE 0 END) AS dragon_percentage,
+    MAX(CASE WHEN type = 'grass' THEN move_percentage ELSE 0 END) AS grass_percentage,
+    MAX(CASE WHEN type = 'ghost' THEN move_percentage ELSE 0 END) AS ghost_percentage,
+    MAX(CASE WHEN type = 'ground' THEN move_percentage ELSE 0 END) AS ground_percentage,
+    MAX(CASE WHEN type = 'fairy' THEN move_percentage ELSE 0 END) AS fairy_percentage
+FROM move_usage_percentage
+GROUP BY move_name
+ORDER BY move_name;

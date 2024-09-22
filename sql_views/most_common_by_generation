@@ -1,0 +1,90 @@
+CREATE VIEW common_move_type_and_others_by_generation4 AS
+WITH move_counts AS (
+    SELECT
+        generation,
+        move_01 AS move_name
+    FROM pokemon
+    WHERE move_01 IS NOT NULL
+    UNION ALL
+    SELECT
+        generation,
+        move_02 AS move_name
+    FROM pokemon
+    WHERE move_02 IS NOT NULL
+    UNION ALL
+    SELECT
+        generation,
+        move_03 AS move_name
+    FROM pokemon
+    WHERE move_03 IS NOT NULL
+),
+most_common_move AS (
+    SELECT
+        generation,
+        move_name,
+        COUNT(*) AS move_count,
+        ROW_NUMBER() OVER (PARTITION BY generation ORDER BY COUNT(*) DESC) AS rank
+    FROM move_counts
+    GROUP BY generation, move_name
+),
+type_counts AS (
+    SELECT
+        generation,
+        type,
+        COUNT(*) AS type_count,
+        ROW_NUMBER() OVER (PARTITION BY generation ORDER BY COUNT(*) DESC) AS rank
+    FROM pokemon
+    WHERE type IS NOT NULL
+    GROUP BY generation, type
+),
+held_items_count AS (
+    SELECT
+        generation,
+        COUNT(DISTINCT held_items) AS held_items_count
+    FROM pokemon
+    WHERE held_items IS NOT NULL
+    GROUP BY generation
+),
+egg_group_counts AS (
+    SELECT
+        generation,
+        egg_group_01 AS egg_group,
+        COUNT(*) AS egg_group_count,
+        ROW_NUMBER() OVER (PARTITION BY generation ORDER BY COUNT(*) DESC) AS rank
+    FROM pokemon
+    WHERE egg_group_01 IS NOT NULL
+    GROUP BY generation, egg_group_01
+),
+color_counts AS (
+    SELECT
+        generation,
+        color,
+        COUNT(*) AS color_count,
+        ROW_NUMBER() OVER (PARTITION BY generation ORDER BY COUNT(*) DESC) AS rank
+    FROM pokemon
+    WHERE color IS NOT NULL
+    GROUP BY generation, color
+)
+SELECT 
+    p.generation,
+    mc.move_name AS most_common_move,
+    tc.type AS most_common_type,
+    hi.held_items_count AS held_items_count,
+    eg.egg_group AS most_common_egg_group,
+    c.color AS most_common_color
+FROM 
+    pokemon p
+JOIN 
+    most_common_move mc ON p.generation = mc.generation AND mc.rank = 1
+JOIN 
+    type_counts tc ON p.generation = tc.generation AND tc.rank = 1
+JOIN 
+    held_items_count hi ON p.generation = hi.generation
+JOIN 
+    egg_group_counts eg ON p.generation = eg.generation AND eg.rank = 1
+JOIN 
+    color_counts c ON p.generation = c.generation AND c.rank = 1
+WHERE 
+    p.generation IN ('generation-i', 'generation-ii', 'generation-iii', 'generation-iv', 'generation-v', 'generation-vi', 'generation-vii', 'generation-viii')
+GROUP BY 
+    p.generation, mc.move_name, tc.type, hi.held_items_count, eg.egg_group, c.color;
