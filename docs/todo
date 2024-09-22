@@ -1,9 +1,0 @@
-- criar um script que adiciona o plugin do clickhouse no metabase
-- criar senha bem definida para todos os servicos
-- entender os volumes
-- colocar o .env no .gitignore
-- .envsample
-- configuracao dos servicos com o .env
-- atribuir um ip fixo para cada container na sua criacao
-
--
