@@ -80,6 +80,3 @@ You can access the following services via the specified URLs:
 ## Credentials
 
 Usernames and passwords are available in `docs/localhost_address.txt`.
-```
-
-You can copy and paste this updated README to your GitHub repository!
