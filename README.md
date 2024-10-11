@@ -1,3 +1,21 @@
+Here’s the updated README with the project overview added at the beginning:
+
+```markdown
+# Project Overview
+
+This project sets up an integrated environment for data visualization and ETL (Extract, Transform, Load) operations, combining Metabase with ClickHouse support and Airbyte for data synchronization. It includes several Dockerized services to provide a comprehensive data pipeline infrastructure.
+
+- **Metabase** is customized with a ClickHouse plugin to enable powerful data visualizations.
+- **Airbyte** is used for flexible data integration and syncing across different databases and APIs.
+- **CloudBeaver** offers a database management interface.
+- **ClickHouse** serves as a high-performance database optimized for analytical queries.
+
+The project is fully containerized using Docker, making it easy to deploy and scale. Key components like PostgreSQL and ClickHouse are integrated, allowing the system to efficiently handle large volumes of data. The included scripts facilitate automatic database population and configuration, ensuring a smooth setup process.
+
+This setup provides a seamless data pipeline for processing, managing, and visualizing complex data flows.
+
+---
+
 # Project Setup
 
 This guide provides instructions for setting up and running the project, which includes Metabase with ClickHouse integration, Airbyte, and other related services.
@@ -65,3 +83,6 @@ You can access the following services via the specified URLs:
 ## Credentials
 
 Usernames and passwords are available in `docs/localhost_address.txt`.
+```
+
+You can copy and paste this updated README to your GitHub repository!
