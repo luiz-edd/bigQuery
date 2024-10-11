@@ -1,6 +1,3 @@
-Here’s the updated README with the project overview added at the beginning:
-
-```markdown
 # Project Overview
 
 This project sets up an integrated environment for data visualization and ETL (Extract, Transform, Load) operations, combining Metabase with ClickHouse support and Airbyte for data synchronization. It includes several Dockerized services to provide a comprehensive data pipeline infrastructure.
